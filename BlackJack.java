@@ -23,33 +23,34 @@ public class BlackJack { // uses variables for TWVars
    
    public static void main(String[] args) {
 
-   deck.gatherCards(); // creates an ordered list of cards
-   deck.cardShuffler(); // pre-shuffles deck
-   instructions();
-   gameStart();
-   pTurn(); // player hit/stay
-   dTurn(); // dealer turn
-   playAgain();
+      deck.gatherCards(); // creates an ordered list of cards
+      deck.cardShuffler(); // pre-shuffles deck
+      instructions();
+      gameStart();
+      pTurn(); // player hit/stay
+      dTurn(); // dealer turn
+      playAgain();
    } // end of main
    
    
    // ---------- basic game instructions ---------- //
    public static void instructions() {
       if(firstGame == true) {
-      System.out.println("HOW TO PLAY BLACKJACK/21:");
-      System.out.println("Each card in this game has its own point value.");
-      System.out.println("Cards 2-10 are worth their face value, the Jack, Queen and King are each worth 10 points, and Aces are either worth 1 or 11 points.");
-      System.out.println("You will be dealt two random cards to start, and then have the option of drawing additional cards (hitting) to increase the point value of your hand or ending your turn (staying).");
-      System.out.println("The goal of the game is to finish with a higher point value in hand than the dealer without exceeding 21 points.");
-      System.out.println("Exceeding 21 points during your turn is an automatic loss, as is referred to as a bust.");
-      System.out.println("You win the game IMMEDIATELY if you get 21 points OR if the dealer busts, or you end the game with a higher point total than the dealer.");
-      System.out.println("You lose the game IMMEDIATELY following your turn if you bust OR if the dealer ends the the game with a higher point total than the you.");
-      System.out.println("Ending the game with the same points as the dealer results in a tie and is referred to as a push.");
-      System.out.println("First you will take your turn, than the dealer will take theirs."); 
-      System.out.println("LET'S PLAY:"); 
-      firstGame = false;
-      } else { System.out.println("OK, LET'S CONTINUE:"); }
-      System.out.println();
+         System.out.println("HOW TO PLAY BLACKJACK/21:");
+         System.out.println("Each card in this game has its own point value.");
+         System.out.println("Cards 2-10 are worth their face value, the Jack, Queen and King are each worth 10 points, and Aces are either worth 1 or 11 points.");
+         System.out.println("You will be dealt two random cards to start, and then have the option of drawing additional cards (hitting) to increase the point value of your hand or ending your turn (staying).");
+         System.out.println("The goal of the game is to finish with a higher point value in hand than the dealer without exceeding 21 points.");
+         System.out.println("Exceeding 21 points during your turn is an automatic loss, as is referred to as a bust.");
+         System.out.println("You win the game IMMEDIATELY if you get 21 points OR if the dealer busts, or you end the game with a higher point total than the dealer.");
+         System.out.println("You lose the game IMMEDIATELY following your turn if you bust OR if the dealer ends the the game with a higher point total than the you.");
+         System.out.println("Ending the game with the same points as the dealer results in a tie and is referred to as a push.");
+         System.out.println("First you will take your turn, than the dealer will take theirs."); 
+         System.out.println("LET'S PLAY:"); 
+         firstGame = false;
+         } else { 
+          System.out.println("OK, LET'S CONTINUE:"); }
+          System.out.println();
     }//end instructions
    
    // ---------- method for starting cards ---------- //
