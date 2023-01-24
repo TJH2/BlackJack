@@ -1,9 +1,11 @@
 //Programmers: Ben Diskin, Jaspreet Khatkar, David Rukashaza-Hancock, T. Jake Holmes II
 //Class CS 145: Face-to-Face
-//Date: 1/21/2023
+//Date: 1/24/2023
 //Assignment: Lab 4: Deck of Cards
 //Reference: Chapters 10 and 14
 //Purpose: Simulate A Game Of Black Jack
+
+//Extra Credit: Queue (lines 19, 69-72), try catch (throughout)
 
 import java.util.*;
 
@@ -15,16 +17,16 @@ public class CardGame { // uses variables for TWVars
    private static int chips = 10; // starting chips
    private static int bet = -1; // chips you bet
    private static Queue<String> deal = new LinkedList<String>(); // the first 4 cards delt
-   private static Deck deck = new Deck();
-   private static ArrayList<String> currentHand = new ArrayList<String>();
-   private static ArrayList<String> dealerHand = new ArrayList<String>();
+   private static Deck deck = new Deck();  // object that shuffles cards/draws a card
+   private static ArrayList<String> currentHand = new ArrayList<String>(); // playerhand for display
+   private static ArrayList<String> dealerHand = new ArrayList<String>(); // dealer hand for display
    
    public static void main(String[] args) {
    
       deck.gatherCards(); // creates an ordered list of cards
       deck.cardShuffler(); // pre-shuffles deck
-      instructions();
-      gameStart();
+      instructions(); // game rules
+      gameStart(); // starting sequence of the game
       pTurn(); // player hit/stay
       dTurn(); // dealer turn
       playAgain();
@@ -44,9 +46,9 @@ public class CardGame { // uses variables for TWVars
          System.out.println("You lose the game IMMEDIATELY following your turn if you bust OR if the dealer ends the the game with a higher point total than the you.");
          System.out.println("Ending the game with the same points as the dealer results in a tie and is referred to as a push.");
          System.out.println("First you will take your turn, than the dealer will take theirs."); 
-         System.out.println("LET'S PLAY:"); 
+         System.out.println("\nLET'S PLAY:"); 
          firstGame = false;
-      } else { System.out.println("OK, LET'S CONTINUE:"); }
+      } else { System.out.println("\nOK, LET'S CONTINUE:"); }
       System.out.println();
    }//end instructions
    
@@ -55,13 +57,14 @@ public class CardGame { // uses variables for TWVars
       Scanner input = new Scanner(System.in); // creates scanner method
    
       while(bet < 0 || bet > chips) {
-         System.out.println("You have " + chips + " chips. How much would you like to bet?");
+         System.out.print("You have " + chips + " chips. How much would you like to bet?\t");
          try { bet = input.nextInt(); }
          catch(InputMismatchException e)  { String issue = input.nextLine();}
          if(bet < 0 || bet > chips) {
             System.out.println("Please choose a bid between 0 and " + chips + " chips.");
-         }}
-      System.out.println("Your bet has been placed.");
+         } // end of if
+      } // end of while
+      System.out.println("Your bet has been placed.\n");
       
       deal.add(deck.draw()); // player 1st card
       deal.add(deck.draw()); // player 2nd card
@@ -69,24 +72,33 @@ public class CardGame { // uses variables for TWVars
       deal.add(deck.draw()); // player 4th card
       
       System.out.println("The first card you are dealt is the " + deal.peek());
-      wait(1000);
+      wait(1000); // slows down text
       currentHand.add(deal.peek());
-      pCount += hit(deal.remove()); // removed first card of hand
+      pCount += hit(deal.remove()); // removed first card of hand and added its value to player count
+      
+      
       System.out.println("The dealer has the " + deal.peek());
       wait(1000);
+      
       dealerHand.add(deal.peek());
       dealerHand.add("?????");
       dCount = hit(deal.remove());
+      
+      
       System.out.println("The second card you are dealt is the " + deal.peek());
       wait(1000);
+      
       currentHand.add(deal.peek());
       pCount += hit(deal.remove());
+      
       if(pCount == 21) { // if player hits 21 they win
          System.out.println("Wow you got 21! How lucky, you win!");
          payOut(true);
-         playAgain(); }
+         playAgain(); 
+      } // end of if
+      
       System.out.println("The dealer's second card is dealt face-down.\n");
-      doubleDown();
+      doubleDown(); // checks if value is 10-11 and allows double down
       return;
    } // end of gameStart
    
@@ -94,6 +106,7 @@ public class CardGame { // uses variables for TWVars
    public static int hit(String newCard) {
       int cardValue = 0;
       Scanner cardChecker = new Scanner(newCard); // scanner to read newCard
+      
       switch(cardChecker.next()) { // switch case to determine value of card
       
          case "ACE":
@@ -111,21 +124,27 @@ public class CardGame { // uses variables for TWVars
          case "FOUR":
             cardValue = 4;
             break;
+            
          case "FIVE":
             cardValue = 5;
             break;
+            
          case "SIX":
             cardValue = 6;
             break;
+            
          case "SEVEN":
             cardValue = 7;
             break;
+            
          case "EIGHT":
             cardValue = 8;
             break;
+            
          case "NINE":
             cardValue = 9;
             break;
+            
          case "TEN":
          case "JACK":
          case "QUEEN":
@@ -133,7 +152,9 @@ public class CardGame { // uses variables for TWVars
             cardValue = 10;
             break;
       }
-      return cardValue; } // end of hit
+      
+      return cardValue; 
+   } // end of hit
    
     // ---------- method for player turn ---------- //
    public static void pTurn() {
@@ -143,16 +164,18 @@ public class CardGame { // uses variables for TWVars
       String card;
       System.out.println("Your Current Hand: " + currentHand.toString());
       System.out.println("Dealer's Current Hand: " + dealerHand.toString());
-      System.out.println("What would you like to do? Enter 1 for hit or 2 for stay.");
+      System.out.print("\nWhat would you like to do? Enter 1 for hit or 2 for stay.\t");
       while(answer != 1 && answer != 2){
-         try {
+         try 
+         {
             answer = input.nextInt();
          }
          catch(InputMismatchException e)  { String issue = input.nextLine();}
          if(answer != 1 && answer != 2) {
             System.out.println("Error: not a valid response.");
             System.out.println("Please choose either 1 for hit or 2 for stay.\n");
-         }} // end of while
+         } // end of if
+       } // end of while
       while(answer == 1) { // player draws another card
          card = deck.draw();
          currentHand.add(card);
@@ -160,22 +183,23 @@ public class CardGame { // uses variables for TWVars
          pCount += cardValue;
          if(pCount > 21 && cardValue == 11) { // code to convert Ace from 1 to 11
             pCount = pCount - 10;
-         } 
-         System.out.println("You tap the table. The dealer deals you the " + card);
+         } // end of if 
+         System.out.println("\nYou tap the table. The dealer deals you the " + card + "\n");
          wait(1000);
          if(pCount == 21) { // if player hits 21 they win
             System.out.println("You got 21! You win!");
             payOut(true);
             playAgain();
-         }
+         } // end of if
          else if(pCount > 21) { // if player exceeds 21 they lose
             System.out.println("Oops. With " + pCount + " points, you bust... and the dealer wins.");
             payOut(false);
             playAgain();
-         } else { // if player is under 21 they can draw another card
+         } // end of if else
+         else { // if player is under 21 they can draw another card
             answer = 0;
             System.out.println("Your Current Hand: " + currentHand.toString()); 
-            System.out.println("What would you like to do? hit = 1 stay = 2");
+            System.out.print("What would you like to do? hit = 1 stay = 2\t");
             wait(1000);
             while(answer != 1 && answer != 2){
                try {
@@ -185,8 +209,12 @@ public class CardGame { // uses variables for TWVars
                if(answer != 1 && answer != 2) {
                   System.out.println("Error: not a valid response.");
                   System.out.println("Please enter 1 for hit or 2 for stay.\n");
-               }}}}// end of while
-      System.out.println("You wave your hand over the table and the dealer begins their turn\n");
+               } // end of if
+            } // end of while
+          } // end of else
+               
+      }// end of while
+      System.out.println("\nYou wave your hand over the table and the dealer begins their turn\n");
       wait(1000);
       return;
    } // end of pTurn
@@ -212,8 +240,8 @@ public class CardGame { // uses variables for TWVars
          System.out.println("The dealer draws a " + card);
          wait(1000);
       }// end of while
-      System.out.println("Your Current Hand: " + currentHand.toString());
-      System.out.println("Dealer's Current Hand: " + dealerHand.toString()); 
+      System.out.println("\nYour Current Hand: " + currentHand.toString());
+      System.out.println("Dealer's Current Hand: " + dealerHand.toString() + "\n"); 
       if(dCount > 21) { System.out.println("Dealer's card count is " + dCount + ". The dealer busts, and you win."); // 21 < dealer
          payOut(true);
          wait(1000); }
@@ -239,18 +267,20 @@ public class CardGame { // uses variables for TWVars
       if(chips <= 0) { 
          System.out.println("Oh no, you've lost all your chips. GAME OVER.");
          System.exit(0);
-      }
+      } // end if
       else {
-         System.out.println("\nPlay Again? yes = 1 no = 2");
+         System.out.print("\nPlay Again? yes = 1 no = 2\t");
          wait(1000);
+         
          while(answer != 1 && answer != 2){
             try {
-               answer = input.nextInt();
-            }
+                  answer = input.nextInt();
+                }
             catch(InputMismatchException e)  { String issue = input.nextLine(); }
             if(answer != 1 && answer != 2) {
-               System.out.println("Please enter 1 for yes or 2 for no.\n");
-            }} // end of while
+               System.out.println("Please enter 1 for yes or 2 for no.\t");
+            } // end if
+          } // end of while
          if(answer == 1) {
             deck.deckChecker();
             pCount = 0;
@@ -263,12 +293,14 @@ public class CardGame { // uses variables for TWVars
             gameStart();
             pTurn(); // player hit/stay
             dTurn(); // dealer turn
-            playAgain(); } // restarts the program
+            playAgain(); 
+         } // restarts the program
          else { 
-            System.out.println("Thank you for playing!");
+            System.out.println("\nThank you for playing!");
             wait(1000);
-            System.exit(0);} // ends program
-      }
+            System.exit(0);
+         } // end if
+      } // end else
       return;
    } // end of play again
    
@@ -304,17 +336,17 @@ public class CardGame { // uses variables for TWVars
       int cardValue;
       String card;
       if(pCount == 10 || pCount == 11) {
-         System.out.println("Would you like to double down? Choose 1 for yes or 2 for no.");
+         System.out.print("Would you like to double down? Choose 1 for yes or 2 for no.");
          while(answer != 1 && answer != 2){
             try {
-               answer = input.nextInt();
-            }
+                  answer = input.nextInt();
+                }
             catch(InputMismatchException e)  { String issue = input.nextLine();}
             if(answer != 1 && answer != 2) {
                System.out.println("Error: not a valid response.");
                System.out.println("Please choose either 1 for yes or 2 for no.\n");
-            } // if
-         } // while
+            } // end of if
+         } // end of while
              
          if(answer == 1) {
             bet += bet;
@@ -328,8 +360,8 @@ public class CardGame { // uses variables for TWVars
             if(pCount == 21) { System.out.println("Wow you got 21! How lucky, you win!"); }
             dTurn(); // dealer turn
             playAgain(); // restarts the program
-         }
-      }
+         } // end of if
+      } // end of if
    } // end double down
     
 } // end of class Blackjack
@@ -347,17 +379,17 @@ class Card {
     // full name of card
    public String cardName() {
       return face + " of " + suit; 
-   }
+   } // end cardname
  
 } // end class Card 
 
 class Deck {
       
-      //arrayList of all unique cards
+   //arrayList of all unique cards
    ArrayList<String> cards = new ArrayList<String>();
-      //Stack for card randomization
+   //Stack for card randomization
    Stack<String> deck = new Stack<String>();
-      //random # generator to shuffle cards into deck
+   //random # generator to shuffle cards into deck
    Random rand = new Random();
    int shuffler; // created random #
       
@@ -395,7 +427,6 @@ class Deck {
          System.out.println("Hold on. Reshuffling deck...");
          gatherCards();
          cardShuffler();
-      }
+      } // end of if
    } // end deck checker
 } // end of deck class
-
